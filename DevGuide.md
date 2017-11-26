@@ -6,7 +6,7 @@ Slack, baby.
 
 ## Code style and quality
 ### Style
-We want to be able to show off our code and not look like trash, so try as hard as possible to conform to the (PEP8 style guide)[https://www.python.org/dev/peps/pep-0008/]. If you develop using PyCharm, style analysis should be enabled automatically, so get rid of those grey squiggly underlines. If you use Spyder, you can enable this (note I haven't yet tried it out in Spyder):
+We want to be able to show off our code and not look like trash, so try as hard as possible to conform to the [PEP8 style guide](https://www.python.org/dev/peps/pep-0008/). If you develop using PyCharm, style analysis should be enabled automatically, so get rid of those grey squiggly underlines. If you use Spyder, you can enable this (note I haven't seen how well it works):
 
 Tools > Preferences > Editor > Real-time code style analysis
 
@@ -38,7 +38,7 @@ The project is currently split between a Dev branch (localhost-based; we'll be u
 Do not develop code on Dev or directly push changes here! Whenever you accept a new card, pull the Dev branch to your local machine so you have the latest changes, then create a new branch, which should be named according to the number and title of the card. E.g. for issue #1 "Initial wireframe for page layout and data to display", a good branch name might be "1_initial_wireframe".
 
 ### Commits
-Pretty please read the (Seven Rules to a great git commit)[https://chris.beams.io/posts/git-commit/].
+Pretty please read the [Seven Rules to a great git commit](https://chris.beams.io/posts/git-commit/).
 Most importantly: Simple short header line, use imperative tense, more detail in the body if needed.
 
 Happy hunting and thanks for reading!
