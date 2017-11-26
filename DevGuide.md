@@ -6,25 +6,25 @@ Slack, baby.
 
 ## Code style and quality
 ### Style
-We want to be able to show off our code and not look like trash, so try as hard as possible to conform to the [PEP8 style guide](https://www.python.org/dev/peps/pep-0008/). If you develop using PyCharm, style analysis should be enabled automatically, so get rid of those grey squiggly underlines. If you use Spyder, you can enable this (note I haven't seen how well it works):
+We want to be able to show off our code and not look like trash, so try as hard as possible to conform to the [PEP8 style guide](https://www.python.org/dev/peps/pep-0008/). If you develop using PyCharm, style analysis should be enabled automatically, so make sure there are no grey squiggly underlines. If you use Spyder, you can enable this (note I haven't seen how well it works):
 
 Tools > Preferences > Editor > Real-time code style analysis
 
 ### Comments and var/function names
-Please err on the side of comment abundance, especially if you're doing something complicated. PEP8 recommends underscore_variable_names not camelCase, so stick with those; and please no ambiguous junk names.
+Please err on the side of too many than insufficient comments, especially if you're doing something complicated. PEP8 recommends underscored_variable_names not camelCase. And please no short/ambiguous var/function names.
 
 ### Code checking
-For mutual learning, error-checking and best practice, all pull requests should be reviewed and merged by somebody else.
+For mutual learning, error-checking and safety, it's best not to merge your own pull requests (in the worst case you'll temporarily break the Dev branch for everyone). Instead, all pull requests should be reviewed and merged into Dev by somebody else, with feedback given if they find any issues.
 
 ## Task management
-All tasks are tracked via issues/cards. Navigate to Projects > Kanban. There are 4 sections:
+All tasks are tracked via issues/cards. Navigate to Projects > Kanban. There are 4 sections which cards progress through:
 - **Analysis**: The home for all brand new issues, decisions to be made, protyping etc.
 - **To Do**: Issues that are well understood. Provide as much detail as possible.
 - **In Progress**: Once a task is assigned to you and you've started on it, move the card here.
 - **Done**: Only move the card here once you've submitted a pull request and it's been merged.
 
 ### Labels
-It's helpful to label cards as often as possible. Common and useful labels include:
+It's helpful to label cards wherever possible. The first 4 are mostly mutually exclusive:
 - **feature**
 - **bug**
 - **decision**
@@ -32,6 +32,9 @@ It's helpful to label cards as often as possible. Common and useful labels inclu
 - **help wanted**: If you get stuck. Probably we'll discuss problems more in Slack, but can't hurt to add this tag if something's giving you a bad time, in case others are looking about for something to do
 
 ## Version control
+### Git
+Time to get real comfortable with git! If you fuck something out, never fear, it's (almost) always reversible, and surely at least one of us can figure it out. Commands like `revert`, `fetch` and `stash` are worth getting familiar with.
+
 ### Branches
 The project is currently split between a Dev branch (localhost-based; we'll be using this for some time) and a Production branch (which we'll fire up once we're ready to start cloud hosting). As y'all probably know, serious projects usually also have a Staging branch that sits between Dev and Production, but I don't think we'll need this.
 
@@ -40,5 +43,8 @@ Do not develop code on Dev or directly push changes here! Whenever you accept a 
 ### Commits
 Pretty please read the [Seven Rules to a great git commit](https://chris.beams.io/posts/git-commit/).
 Most importantly: Simple short header line, use imperative tense, more detail in the body if needed.
+
+## Databases
+If/when we come to integrating a database, best practice/necessity is to use [schema migrations](https://en.wikipedia.org/wiki/Schema_migration). Make sure you grok that when the time comes that you need to.
 
 Happy hunting and thanks for reading!
