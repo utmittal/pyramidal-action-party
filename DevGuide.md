@@ -109,6 +109,9 @@ the difference is between the two, so I'd suggest just add at least one person a
 
 It's nice if you also select a label indicating what the pull request is, though not essential.
 
+Finally, return to the Kanban board and move your card into the "Deployment" list. It should sit here until eventually
+merged onto the production branch. 
+
 ### Reviewing Pull Requests
 On the GitHub repo, click 'Pull requests' to see pending requests and the assignee. It probably mostly won't matter who
 reviews any particular pull request (as long as it's not the same person who made it), so please review and merge 
@@ -117,7 +120,10 @@ whenever you see requests waiting around.
 Click a request. Check at the top next to the green "Open" logo and make sure they're merging into dev (or production, as appropriate).  
 
 Click the "Files changed" tab and scroll down to see all the added and deleted lines in the commit. If there are any 
-obvious problems click "Review changes" and leave a comment, though there's no great way to tell if the changes will 
+obvious problems click "Review changes" and leave a comment. You can also move the card back into "Doing" or "Testing" 
+on the Kanban board.  
+
+Realistically though there's no great way to tell if the changes will 
 break everything, so usually just navigate back to the "Conversation" tab and scroll down to click "Merge pull request".
 
 Hopefully the person who made the commit will have been fairly diligent already, and will
