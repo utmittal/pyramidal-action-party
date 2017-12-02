@@ -1,0 +1,10 @@
+# Twitter API credentials
+twitter_credentials.txt
+
+# PyCharm junk
+.idea
+
+# Exclude tweet files except an example tweet set or few
+tweets/*
+!tweets/bats.txt.bz2
+
