@@ -19,12 +19,34 @@ http://socialmedia-class.org/twittertutorial.html
 
 import re        # for checking whether file name extension included
 import os        # for checking whether credentials.txt file present
-from twitter import Twitter, OAuth
 import bz2       # for writing to .bz2 file
 import io        # for wrapping string output to encode
 import json      # for converting Twitter library object to dictionary
 import sys       # to determine if invoked from command line or IDE
 import argparse
+from test.twitter_search import validate_kwargs
+from twitter import Twitter, OAuth
+
+
+def twitter_OAuth():
+    """Create an OAuth link to Twitter API"""
+    # Read in credentials for OAuth
+    if 'twitter_credentials.txt' in os.listdir():
+        creds = open('twitter_credentials.txt', 'r')
+        access_token = creds.readline().strip()
+        access_secret = creds.readline().strip()
+        consumer_key = creds.readline().strip()
+        consumer_secret = creds.readline().strip()
+        creds.close()
+    else:
+        access_token = input("Please enter access token:\n")
+        access_secret = input("Please enter access token secret:\n")
+        consumer_key = input("Please enter consumer key:\n")
+        consumer_secret = input("Please enter consumer key secret:\n")
+
+    # Initiate the connection to Twitter Streaming API
+    oauth = OAuth(access_token, access_secret, consumer_key, consumer_secret)
+    return Twitter(auth=oauth)
 
 
 def search_tweets(query, **kwargs):
@@ -46,51 +68,28 @@ def search_tweets(query, **kwargs):
     Returns:
         None
     """
-    # If count specified, extract that, otherwise default to 15
+    # Validate kwargs
+    validate_kwargs(**kwargs)
+
+    # If count specified extract that, otherwise default to 15
+    extra_to_retrieve = 15
     if 'count' in kwargs:
         extra_to_retrieve = kwargs.pop('count')
-        assert 1 <= extra_to_retrieve <= 100, 'Count must be in range [1, 100]'
-    else:
-        extra_to_retrieve = 15
 
     # Extract file name to write results to. Add '.txt.bz2' extention if needed
+    filename = './tweets/tweets.txt.bz2'
     if 'file' in kwargs:
         filename = './tweets/' + kwargs.pop('file')
-        if not re.search('\.txt\.bz2$', filename):
+        if not re.search(r'.txt.bz2$', filename):
             filename = filename + '.txt.bz2'
-    else:
-        filename = './tweets/tweets.txt.bz2'
 
-    # If exact search specified, enclose in quotation marks (multi-word queries)
+        # If exact search specified, enclose in quotation marks (multi-word queries)
     if 'exact' in kwargs:
-        assert isinstance(kwargs['exact'], bool), "exact argument must be a boolean"
         exact = kwargs.pop('exact')
         if len(query) > 1 and exact:
             query = '"' + query + '"'
 
-    # Additional argument checking
-    if 'result_type' in kwargs:
-        assert kwargs['result_type'] in ['recent', 'popular', 'mixed'], "Invalid result_type"
-    if 'until' in kwargs:   # Must be formatted as date YYYY-MM-DD
-        assert re.search('[0-9]{4}-[0-9]{2}-[0-9]{2}', kwargs['until'])
-
-    # Read in credentials for OAuth
-    if 'twitter_credentials.txt' in os.listdir():
-        creds = open('twitter_credentials.txt', 'r')
-        access_token = creds.readline().strip()
-        access_secret = creds.readline().strip()
-        consumer_key = creds.readline().strip()
-        consumer_secret = creds.readline().strip()
-        creds.close()
-    else:
-        access_token = input("Please enter access token:\n")
-        access_secret = input("Please enter access token secret:\n")
-        consumer_key = input("Please enter consumer key:\n")
-        consumer_secret = input("Please enter consumer key secret:\n")
-
-    # Initiate the connection to Twitter Streaming API
-    oauth = OAuth(access_token, access_secret, consumer_key, consumer_secret)
-    twitter = Twitter(auth=oauth)
+    twitter = twitter_OAuth()
 
     # Save tweets to .bz2 file
     output = bz2.BZ2File(filename, 'w')
