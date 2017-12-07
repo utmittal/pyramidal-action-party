@@ -4,6 +4,52 @@ Hey crew! I've put together a little guide for proposed best development practic
 ## Communication
 Slack, baby.
 
+## Dev environment
+A great way to manage your pip packages is with `pyenv` and `pip-tools`  
+
+### Pyenv
+Pyenv allows you to maintain multiple python installations on your machine at 
+once (including virtual installations), automatically switch between them for
+different projects, and have the right packages and versions installed for each.
+
+This step is optional though recommended.
+
+    # Install pyenv
+    $ pip install pyenv
+
+    # Create a virtual environment which will manage pip packages for this project
+    $ pyenv virtualenv 3.6.3 pyramidal      #or whatever you want to call it
+
+    # Set pyenv to use this virtual env for the project
+    $ cd pyramidal-action-party/
+    $ pyenv local pyramidal
+
+Now all packages and commands executed relevant to the project will be locked 
+to a virtual instance of Python version 3.6.3, and all packages installed for it.
+
+### Pip-tools
+Pip-tools is a super handy way to automate packages management for a project and
+quickly install everything you need to get up and going.
+
+    $ pip install pip-tools
+    
+pip-tools will look for the file 'requirements.in', where all necessary packages
+for the current project should be listed. pip-tools can use this to recursively
+derive a list of all dependency packages, and save it as requirements.txt
+
+    $ pip-compile [-U]
+
+Including the -U flag will update to the latest version of all packages.
+This may be good, but may also break everything. We can now install dependencies:
+
+    $ pip install -r requirements.txt
+    
+    # To uninstall extraneous pip packages which may be polluting your virtual python env:
+    pip-sync
+
+You should now be good to run all code for the project.
+
+
 ## Code style and quality
 ### Style
 We want to be able to show off our code and not look like trash, so try as hard as possible to conform to the [PEP8 style guide](https://www.python.org/dev/peps/pep-0008/). If you develop using PyCharm, style analysis should be enabled automatically, so make sure there are no grey squiggly underlines. If you use Spyder, you can enable this (note I haven't seen how well it works):
@@ -127,6 +173,7 @@ Realistically though there's no great way to tell if the changes will
 break everything, so usually just navigate back to the "Conversation" tab and scroll down to click "Merge pull request".
 
 Hopefully the person who made the commit will have been fairly diligent already, and will
+
 
 ## Databases
 If/when we come to integrating a database, best practice/necessity is to use [schema migrations](https://en.wikipedia.org/wiki/Schema_migration). Make sure you grok that when the time comes that you need to.

@@ -9,5 +9,9 @@ twitter_credentials.txt
 tweets/*
 !tweets/bats.txt.bz2
 
-# Swap file
-.swp
+# pip-tools
+requirements.txt
+
+# pyenv
+.python-version
+
