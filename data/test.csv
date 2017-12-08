@@ -1,0 +1,3 @@
+Store ID,Location,State,Postcode,Rule,Support,Confidence,Lift,Upsell value
+35,Roxburgh park,VIC,3064,{233 Blackened Salmon Taco} => {237 Carnitas with Grilled Pineapple Taco},0.0128,0.5888,26.9896,2.9112
+2,Head Office,VIC,3166,{233 Blackened Salmon Taco} => {237 Carnitas with Grilled Pineapple Taco},0.0052,0.4167, 27.8876, 2.0625
