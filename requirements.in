@@ -4,3 +4,5 @@ dash-html-components
 dash-core-components
 plotly
 pandas
+numpy
+ipykernel
