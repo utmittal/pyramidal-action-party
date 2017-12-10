@@ -15,3 +15,5 @@ requirements.txt
 # pyenv
 .python-version
 
+# Compiled Python
+*__pycache__*
