@@ -5,75 +5,65 @@ Dash app homepage for Action Potential Party web app
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import pandas as pd
 import plotly.graph_objs as go
+
+# Reusable elements
 from app_components.table import generate_table
+# Data sources
+from data.data_sources import team_members, basket, health_text, demographics
 
-
+# Initialise the app
 app = dash.Dash()
+
+# Default CSS settings so that text doesn't look awful
 app.css.append_css({"external_url":
                     "https://codepen.io/chriddyp/pen/bWLwgP.css"})
+# Background and text CSS (feel free to change)
+background = '#ffffff'  # light green
+text = '#2B521A'        # dark text
 
-# Data for CSS
-background = '#111111'  # black
-text = '#7FDBFF'        # a shade of blue
-
-# Data for a table (of U.S. agriculture um....)
-# US_agri = pd.read_csv(
-#    'https://gist.githubusercontent.com/chriddyp/'
-#    'c78bf172206ce24f77d6363a2d754b59/raw/'
-#    'c353e8ef842413cae56ae3920b8fd78468aa4cb2/'
-#    'usa-agricultural-exports-2011.csv')
-
-# my fake data
-basket = pd.read_csv('data/test.csv')
-
-# Demographic data: country, continent, population, life exp, GDP per capita
-df = pd.read_csv(
-    'https://gist.githubusercontent.com/chriddyp/' +
-    '5d1ea79569ed194d432e56108a04d188/raw/' +
-    'a9f9e8076b837d541398e999dcbac2b2826a81f8/' +
-    'gdp-life-exp-2007.csv')
-
-# Data for personnel graph
-team_members = ['Liza', 'Nikunj', 'Noosh', 'Utkarsh']
-
-# Text for a markdown section below
-health_text = """
-#
-# Global Demographic information
-### What we Care About
-We care about people getting to live an equally long time
-
-### Why we Care
-According to the philosophical concept of the "veil of ignorance", WE could
-have been born somewhere poor!
-"""
 
 # Main page layout
 app.layout = html.Div(style={'backgroundColor': background}, children=[
+    # Title and heading
     html.H1(
-        children='Pyramidal Action Party',
+        children='Pyramidal Action Party!',
         style={
             'textAlign': 'center',
             'color': text
         }),
 
-    html.Div(children='A multi-API information retrieval and NLP platform.',
+    html.Div(children='A multi-API information retrieval and NLP platform.'
+             '\nBrewed with love.',
              style={
                 'textAlign': 'center',
                 'color': text,
                 'fontSize': '24px'
              }),
 
+    # Input for search query and APIs to include
     html.Div(style={'textAlign': 'center'}, children=[
 
         html.Label(children='Please enter your search query:', style={
             'color': text}),
 
-        dcc.Input(value='cats', type='text')]
-    ),
+        dcc.Input(value='cats', type='text'),
 
+        html.Button('Do it!', style={'color': text}),
+
+        html.Label('APIs to include:', style={'color': text}),
+        dcc.Checklist(
+            options=[
+                {'label': 'Twitter', 'value': 'twitter'},
+                {'label': 'LinkedIn', 'value': 'linkedin'},
+                {'label': 'Google', 'value': 'google'}
+            ],
+            values=['twitter'],
+            style={'color': text}
+        )
+    ]),
+
+    # Graph of personnel traits
     dcc.Graph(
         id='personnel-graph',
         figure={
@@ -95,20 +85,22 @@ app.layout = html.Div(style={'backgroundColor': background}, children=[
         }
     ),
 
+    # Demo of a table
     html.H4('Basket Analysis', style={'color': text}),
+    generate_table(basket, '#2B521A'),
 
-    generate_table(basket),
-
+    # Demo of how Markdown can be used
     dcc.Markdown(health_text, containerProps={'style': {'color': text}}),
 
+    # Demo of a fancy scatter plot
     dcc.Graph(
         id='life-exp-vs-gdp',
         figure={
             'data': [
                 go.Scatter(
-                    x=df[df['continent'] == i]['gdp per capita'],
-                    y=df[df['continent'] == i]['life expectancy'],
-                    text=df[df['continent'] == i]['country'],
+                    x=demographics[demographics['continent'] == i]['gdp per capita'],
+                    y=demographics[demographics['continent'] == i]['life expectancy'],
+                    text=demographics[demographics['continent'] == i]['country'],
                     mode='markers',
                     opacity=0.7,
                     marker={
@@ -116,18 +108,21 @@ app.layout = html.Div(style={'backgroundColor': background}, children=[
                         'line': {'width': 0.5, 'color': 'white'}
                     },
                     name=i
-                ) for i in df.continent.unique()
+                ) for i in demographics.continent.unique()
             ],
             'layout': go.Layout(
                 xaxis={'type': 'log', 'title': 'GDP Per Capita'},
                 yaxis={'title': 'Life Expectancy'},
                 margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
                 legend={'x': 0, 'y': 1},
-                hovermode='closest'
+                hovermode='closest',
+                plot_bgcolor=background,
+                paper_bgcolor=background
             )
         }
     )
 ])
 
+# Start the app
 if __name__ == '__main__':
     app.run_server(debug=True)
