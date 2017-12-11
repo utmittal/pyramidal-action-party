@@ -6,6 +6,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
+from dash.dependencies import Input, Output
 
 # Reusable elements
 from app_components.table import generate_table
@@ -47,7 +48,11 @@ app.layout = html.Div(style={'backgroundColor': background}, children=[
         html.Label(children='Please enter your search query:', style={
             'color': text}),
 
-        dcc.Input(value='cats', type='text'),
+        dcc.Input(
+            value='',
+            id='query-input',
+            type='text',
+            placeholder='E.g. cats'),
 
         html.Button('Do it!', style={'color': text}),
 
@@ -59,9 +64,14 @@ app.layout = html.Div(style={'backgroundColor': background}, children=[
                 {'label': 'Google', 'value': 'google'}
             ],
             values=['twitter'],
+            labelStyle={'display': 'inline-block'},
             style={'color': text}
         )
     ]),
+
+    html.H3(
+        id='results-div',
+        style={'color': text, 'fontSize': '24px', 'textAlign': 'center'}),
 
     # Graph of personnel traits
     dcc.Graph(
@@ -122,6 +132,18 @@ app.layout = html.Div(style={'backgroundColor': background}, children=[
         }
     )
 ])
+
+
+# Callbacks
+@app.callback(
+    Output(component_id='results-div', component_property='children'),
+    [Input(component_id='query-input', component_property='value')]
+)
+def update_output_div(input_value):
+    if len(input_value) > 0:
+        return 'Results for {}:'.format(input_value)
+    else:
+        return 'Results:'
 
 # Start the app
 if __name__ == '__main__':
