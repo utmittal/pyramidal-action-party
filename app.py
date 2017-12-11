@@ -6,12 +6,18 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State, Event
 
 # Reusable elements
 from app_components.table import generate_table
 # Data sources
 from data.data_sources import team_members, basket, health_text, demographics
+
+# Search functionality
+from twitter_search import search_tweets
+import json
+import bz2
+
 
 # Initialise the app
 app = dash.Dash()
@@ -54,7 +60,11 @@ app.layout = html.Div(style={'backgroundColor': background}, children=[
             type='text',
             placeholder='E.g. cats'),
 
-        html.Button('Do it!', style={'color': text}),
+        html.Button(
+            'Do it!',
+            id='submit-button',
+            type='submit',
+            style={'color': text}),
 
         html.Label('APIs to include:', style={'color': text}),
         dcc.Checklist(
@@ -70,8 +80,12 @@ app.layout = html.Div(style={'backgroundColor': background}, children=[
     ]),
 
     html.H3(
-        id='results-div',
+        'Results:',
+        id='results-header',
         style={'color': text, 'fontSize': '24px', 'textAlign': 'center'}),
+
+    html.Div(
+        id='results-div'),
 
     # Graph of personnel traits
     dcc.Graph(
@@ -134,16 +148,39 @@ app.layout = html.Div(style={'backgroundColor': background}, children=[
 ])
 
 
-# Callbacks
+### Callbacks ###
+
+# Submit query to APIs
 @app.callback(
-    Output(component_id='results-div', component_property='children'),
-    [Input(component_id='query-input', component_property='value')]
+    Output('results-div', 'children'),
+    [],
+    [State('query-input', 'value')],
+    [Event('submit-button', 'click')]
 )
-def update_output_div(input_value):
-    if len(input_value) > 0:
-        return 'Results for {}:'.format(input_value)
+def query_APIs(state):
+    print('Current state: {}'.format(state))
+    if len(state) > 0:
+        results = []
+        search_tweets(state, **{'file': 'temp', 'lang': 'en'})
+        tweet_file = bz2.BZ2File('./tweets/temp.txt.bz2', mode='r')
+        for i in range(1, 7):
+            tweet = json.loads(tweet_file.readline(), encoding='utf-8')
+            results.append(str(i) + '. ' + tweet['text'])
+            results.append(html.Br())
+        tweet_file.close()
+        return results
     else:
-        return 'Results:'
+        return 'Try entering a search query :-)'
+
+
+@app.callback(
+    Output('results-header', 'children'),
+    [],
+    [State('query-input', 'value')],
+    [Event('submit-button', 'click')]
+)
+def update_header(state):
+    return 'Results for \'{}:\''.format(state)
 
 # Start the app
 if __name__ == '__main__':
