@@ -6,6 +6,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
+from html import unescape
 from dash.dependencies import Input, Output, State, Event
 
 # Reusable elements
@@ -150,6 +151,17 @@ app.layout = html.Div(style={'backgroundColor': background}, children=[
 
 ### Callbacks ###
 
+# Update heading
+@app.callback(
+    Output('results-header', 'children'),
+    [],
+    [State('query-input', 'value')],
+    [Event('submit-button', 'click')]
+)
+def update_header(state):
+    return 'Results for \'{}\':'.format(state)
+
+
 # Submit query to APIs
 @app.callback(
     Output('results-div', 'children'),
@@ -165,22 +177,14 @@ def query_APIs(state):
         tweet_file = bz2.BZ2File('./tweets/temp.txt.bz2', mode='r')
         for i in range(1, 7):
             tweet = json.loads(tweet_file.readline(), encoding='utf-8')
-            results.append(str(i) + '. ' + tweet['text'])
+            # html.escape() turns e.g. &amp; => &
+            results.append(str(i) + '. ' + unescape(tweet['text']))
             results.append(html.Br())
         tweet_file.close()
         return results
     else:
         return 'Try entering a search query :-)'
 
-
-@app.callback(
-    Output('results-header', 'children'),
-    [],
-    [State('query-input', 'value')],
-    [Event('submit-button', 'click')]
-)
-def update_header(state):
-    return 'Results for \'{}:\''.format(state)
 
 # Start the app
 if __name__ == '__main__':
