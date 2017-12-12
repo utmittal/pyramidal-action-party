@@ -22,8 +22,8 @@ import os        # for checking whether credentials.txt file present
 import bz2       # for writing to .bz2 file
 import io        # for wrapping string output to encode
 import json      # for converting Twitter library object to dictionary
-import sys       # to determine if invoked from command line or IDE
-import argparse
+# import sys       # to determine if invoked from command line or IDE
+# import argparse
 from test.twitter_search import validate_kwargs
 from twitter import Twitter, OAuth
 
@@ -135,30 +135,30 @@ def search_tweets(query, **kwargs):
 
 
 # Invoke function if called from console. Note I don't actually understand this
-if sys.stdout.isatty():
-    parser = argparse.ArgumentParser(description='Scrape tweets for a given query.')
-    parser.add_argument('query', help='The search query', type=str, default='happy')
-    parser.add_argument('-l', '--lang', help='Restrict retrieved tweets to a given language', type=str)
-    parser.add_argument('-r', '--result_type', help='Choose between recent and popular tweets', type=str,
-                        choices=['recent', 'popular', 'mixed'])
-    parser.add_argument('-c', '--count', help='Number of tweets to retrieve', type=int)
-    parser.add_argument('-u', '--until', help='Final date to retrieve tweets until', type=str, metavar='YYYY-MM-DD')
-    parser.add_argument('-s', '--since_id', help='Min tweet ID to retrieve', type=int)
-    parser.add_argument('-m', '--max_id', help='Max tweet ID to retrieve', type=int)
-    parser.add_argument('-i', '--include_entities', help='Whether to include entities node', type=str,
-                        choices=['true', 'false'])
-    parser.add_argument('-f', '--file', help='File name to write the results to.', type=str)
-    parser.add_argument('-e', '--exact', help='Only retrieve exact query matches', action='store_true')
-
-    args = parser.parse_args()
-    dict_args = vars(args)
-
-    # Convert args to a dictionary
-    args = {}
-    q = dict_args.pop('query')
-
-    for key, value in dict_args.items():
-        if value:
-            args[key] = value
-
-    search_tweets(q, **args)
+#if sys.stdout.isatty():
+#    parser = argparse.ArgumentParser(description='Scrape tweets for a given query.')
+#    parser.add_argument('query', help='The search query', type=str, default='happy')
+#    parser.add_argument('-l', '--lang', help='Restrict retrieved tweets to a given language', type=str)
+#    parser.add_argument('-r', '--result_type', help='Choose between recent and popular tweets', type=str,
+#                        choices=['recent', 'popular', 'mixed'])
+#    parser.add_argument('-c', '--count', help='Number of tweets to retrieve', type=int)
+#    parser.add_argument('-u', '--until', help='Final date to retrieve tweets until', type=str, metavar='YYYY-MM-DD')
+#    parser.add_argument('-s', '--since_id', help='Min tweet ID to retrieve', type=int)
+#    parser.add_argument('-m', '--max_id', help='Max tweet ID to retrieve', type=int)
+#    parser.add_argument('-i', '--include_entities', help='Whether to include entities node', type=str,
+#                        choices=['true', 'false'])
+#    parser.add_argument('-f', '--file', help='File name to write the results to.', type=str)
+#    parser.add_argument('-e', '--exact', help='Only retrieve exact query matches', action='store_true')
+#
+#    args = parser.parse_args()
+#    dict_args = vars(args)
+#
+#    # Convert args to a dictionary
+#    args = {}
+#    q = dict_args.pop('query')
+#
+#    for key, value in dict_args.items():
+#        if value:
+#            args[key] = value
+#
+#    search_tweets(q, **args)
