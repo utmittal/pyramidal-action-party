@@ -44,9 +44,9 @@ app.layout = html.Div(style={'backgroundColor': background}, children=[
     html.Div(children='A multi-API information retrieval and NLP platform.'
              '\nBrewed with love.',
              style={
-                'textAlign': 'center',
-                'color': text,
-                'fontSize': '24px'
+                 'textAlign': 'center',
+                 'color': text,
+                 'fontSize': '24px'
              }),
 
     # Input for search query and APIs to include
@@ -151,7 +151,6 @@ app.layout = html.Div(style={'backgroundColor': background}, children=[
 
 ### Callbacks ###
 
-# Update heading
 @app.callback(
     Output('results-header', 'children'),
     [],
@@ -159,10 +158,10 @@ app.layout = html.Div(style={'backgroundColor': background}, children=[
     [Event('submit-button', 'click')]
 )
 def update_header(state):
+    """Update heading"""
     return 'Results for \'{}\':'.format(state)
 
 
-# Submit query to APIs
 @app.callback(
     Output('results-div', 'children'),
     [],
@@ -170,8 +169,9 @@ def update_header(state):
     [Event('submit-button', 'click')]
 )
 def query_APIs(state):
+    """Submit query to APIs"""
     print('Current state: {}'.format(state))
-    if len(state) > 0:
+    if state:
         results = []
         search_tweets(state, **{'file': 'temp', 'lang': 'en'})
         tweet_file = bz2.BZ2File('./tweets/temp.txt.bz2', mode='r')
@@ -182,8 +182,8 @@ def query_APIs(state):
             results.append(html.Br())
         tweet_file.close()
         return results
-    else:
-        return 'Try entering a search query :-)'
+
+    return 'Try entering a search query :-)'
 
 
 # Start the app

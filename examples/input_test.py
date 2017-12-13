@@ -33,8 +33,7 @@ app.layout = html.Div([
                 value='Linear',
                 labelStyle={'display': 'inline-block'}
             )
-        ],
-        style={'width': '48%', 'display': 'inline-block'}),
+        ], style={'width': '48%', 'display': 'inline-block'}),
 
         html.Div([
             dcc.Dropdown(
@@ -48,7 +47,7 @@ app.layout = html.Div([
                 value='Linear',
                 labelStyle={'display': 'inline-block'}
             )
-        ],style={'width': '48%', 'float': 'right', 'display': 'inline-block'})
+        ], style={'width': '48%', 'float': 'right', 'display': 'inline-block'})
     ]),
 
     dcc.Graph(id='indicator-graphic'),
@@ -62,6 +61,7 @@ app.layout = html.Div([
         marks={str(year): str(year) for year in df['Year'].unique()}
     )
 ])
+
 
 @app.callback(
     dash.dependencies.Output('indicator-graphic', 'figure'),
@@ -104,4 +104,3 @@ def update_graph(xaxis_column_name, yaxis_column_name,
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-    
